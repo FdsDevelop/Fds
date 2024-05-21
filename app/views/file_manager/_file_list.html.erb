@@ -1,0 +1,162 @@
+<% sub_nodes = @dir_node.sub_nodes %>
+
+<%= render_upload_file(@dir_node.node_path_str) %>
+
+<style>
+    .node-selected {
+        background-color: #b1baff;
+    }
+
+    .link-wrapper {
+        display: flex;
+        text-decoration: none;
+        align-items: center;
+        color: black;
+    }
+
+    .link-wrapper img {
+        width: 32px;
+        height: 32px;
+        flex: 1;
+    }
+
+    .link-wrapper span {
+        flex: 20;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<div>
+  <table class="table table-hover" func="files_list">
+    <colgroup>
+      <col style="width: 2%;">
+      <col style="width: 75%;">
+      <col style="width: 8%;">
+      <col style="width: 15%;">
+    </colgroup>
+    <thead>
+    <tr>
+      <th><input type="checkbox" id="toggle_check_box" onclick="toggle_check_boxes(this)"></th>
+      <th>文件名</th>
+      <th>大小</th>
+      <th>修改日期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% sub_nodes.each do |node| %>
+      <tr id=<%= "tr-#{node.id}" %> oncontextmenu="tr_context_menu(this)">
+        <td style="vertical-align: middle; text-align: center">
+          <input type="checkbox" id="<%= node.id %>" onclick="select_check_box(this)">
+        </td>
+
+        <% if node.node_type == FdsNode.DIR_TYPE %>
+          <td>
+            <a class="link-wrapper" href="<%= file_explore_path(dir: node.node_path_str) %>">
+              <%= image_tag "#{node.node_type_str}_icon.svg" %>
+              <span><%= node.name %></span>
+            </a>
+          </td>
+        <% else %>
+          <td>
+            <a class="link-wrapper" href="<%= direct_download_path(id: node.id) %>">
+              <%= image_tag "#{node.node_type_str}_icon.svg" %>
+              <span><%= node.name %></span>
+            </a>
+          </td>
+        <% end %>
+
+        <td style="vertical-align: middle;"><%= node.human_size %></td>
+        <td style="vertical-align: middle;"><%= node.human_updated_at %></td>
+      </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+</div>
+
+<ul class="dropdown-menu" id="contextMenu">
+</ul>
+
+<script>
+    // 针对 check_box 的操作
+    function select_check_box(check_box) {
+        var tr = check_box.parentNode.parentNode;
+        if (check_box.checked) {
+            tr.className = "node-selected";
+        } else {
+            tr.className = "";
+        }
+    }
+
+    function toggle_check_boxes(toggle_check_box) {
+        var check_boxes = document.querySelectorAll('table[func="files_list"] tbody input[type="checkbox"]');
+        if (toggle_check_box.checked) {
+            for (var i = 0; i < check_boxes.length; i++) {
+                check_boxes[i].checked = true;
+                select_check_box(check_boxes[i])
+            }
+        } else {
+            for (var i = 0; i < check_boxes.length; i++) {
+                check_boxes[i].checked = false;
+                select_check_box(check_boxes[i])
+            }
+        }
+    }
+
+    // 针对 TR 的操作
+    function cancel_other_checkbox() {
+        var check_boxes = document.querySelectorAll('table[func="files_list"] tbody input[type="checkbox"]');
+        for (var i = 0; i < check_boxes.length; i++) {
+            check_boxes[i].checked = false;
+            select_check_box(check_boxes[i]);
+        }
+    }
+
+    function selected_ids() {
+        let selected_ids = []
+        let check_boxes = document.querySelectorAll('table[func="files_list"] tbody input[type="checkbox"]');
+        for (var i = 0; i < check_boxes.length; i++) {
+            if (check_boxes[i].checked) {
+                selected_ids.push(parseInt(check_boxes[i].id))
+            }
+        }
+        return selected_ids;
+    }
+
+    function tr_context_menu(tr) {
+        event.preventDefault();
+        let x = event.pageX;
+        let y = event.pageY;
+
+        let checkbox = tr.querySelector('input[type="checkbox"]');
+        if (!checkbox.checked) {
+            cancel_other_checkbox();
+            checkbox.checked = true;
+            select_check_box(checkbox);
+        }
+        let s_ids = selected_ids();
+
+        $.ajax({
+            type: "get",
+            url: "<%= fds_context_menu_files_operation_path %>",
+            data: {ids: s_ids},
+            success: function (response) {
+                let ul = document.getElementById("contextMenu");
+                ul.style.left = x + "px";
+                ul.style.top = y + "px";
+                ul.style.display = "block";
+                ul.innerHTML = "";
+                ul.innerHTML = response;
+
+            },
+            error: function () {
+            }
+        });
+
+        $(document).on("click", function(event) {
+            $("#contextMenu").hide();
+        });
+    }
+
+</script>

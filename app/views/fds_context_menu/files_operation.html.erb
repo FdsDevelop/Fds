@@ -1,0 +1,22 @@
+<% if @nodes.present? %>
+  <% if @nodes.length == 1 %>
+    <li>
+      <a class="dropdown-item" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#detail_modal" data-bs-node-id="<%= @nodes.first.id %>">详细信息</a>
+    </li>
+    <li>
+      <a class="dropdown-item" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#rename_modal" data-bs-node-id="<%= @nodes.first.id %>">重命名</a>
+    </li>
+  <% else %>
+
+  <% end %>
+  <li>
+    <a class="dropdown-item" href="<%= delete_nodes_path(ids: @nodes.map(&:id)) %>" data-method="post" data-confirm="确认删除？">删除</a>
+  </li>
+  <li>
+    <a class="dropdown-item" href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#move_nodes_modal">移动或复制</a>
+  </li>
+<% else %>
+
+<% end %>
+
+

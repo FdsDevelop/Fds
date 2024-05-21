@@ -1,0 +1,64 @@
+<div class="modal fade" id="detail_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">详细信息</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3" id="detail_content">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#detail_modal").on("show.bs.modal", function () {
+            show_detail();
+        });
+        $("#detail_modal").on("hide.bs.modal", function () {
+        });
+    })
+
+    function show_detail() {
+        let id = selected_ids()[0];
+        let detail_content_div = document.getElementById("detail_content");
+        $.ajax({
+            type: "post",
+            url: "<%= get_detail_path %>",
+            data: {id: id},
+            success: function (response) {
+                let ret_code = response["ret_code"];
+                console.log(response)
+                if (ret_code === 0) {
+                    detail_content_div.innerHTML = "";
+                    let data = response["data"];
+                    data.forEach(obj => {
+                       for (let key in obj){
+                           let value = obj[key];
+                           detail_content_div.innerHTML += `<label for="recipient-name" class="col-form-label">${key}:</label>`
+                           detail_content_div.innerHTML += `<p>${value}</p>`
+                       }
+                    });
+                } else {
+                    detail_content_div.innerHTML = "";
+                    detail_content_div.innerHTML = `<div class="alert alert-danger" role="alert">
+                                                      ${response["err_msg"]}
+                                                    </div>`
+                }
+            },
+            error: function (response) {
+                console.log(response)
+                detail_content_div.innerHTML = "";
+                detail_content_div.innerHTML = `<div class="alert alert-danger" role="alert">
+                                                    请求失败!!!
+                                                  </div>`
+            }
+        })
+    }
+</script>

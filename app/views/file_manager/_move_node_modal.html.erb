@@ -1,0 +1,212 @@
+<div class="modal fade" id="move_nodes_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalScrollableTitle">选择目录</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" id="target_node_select">
+
+        <div id="target_node_page">
+          <div class="col d-flex align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+              <ol class="breadcrumb" id="target_node_nav">
+              </ol>
+            </nav>
+          </div>
+
+          <table class="table table-hover">
+            <colgroup>
+              <col style="width: 100%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th>目录名</th>
+            </tr>
+            </thead>
+            <tbody id="target_node_content">
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="container" id="target_node_error" style="display: none">
+        <div class="alert alert-danger" role="alert">
+          请求失败!!!
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <%= form_tag move_nodes_path, method: :post, id: "move_nodes_form" do %>
+        <% end %>
+        <div id="copy_nodes_div"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="error_copy_dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">提示：</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        请求失败！！！
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    var main_node_id = <%= @dir_node.id %>;
+    $(document).ready(function () {
+        $("#move_nodes_modal").on("show.bs.modal", function () {
+            console.log("展示");
+            show_target_dialog(main_node_id);
+        });
+        $("#move_nodes_modal").on("hide.bs.modal", function () {
+            console.log("隐藏");
+        });
+    })
+
+
+    function show_target_dialog(node_id) {
+        let page_div = document.getElementById("target_node_page")
+        let error_div = document.getElementById("target_node_error")
+        $.ajax({
+            type: "post",
+            url: "<%= dir_node_info_path %>",
+            data: {target_node_id: node_id},
+            success: function (response) {
+                console.log(response)
+                if (response["ret_code"] !== 0) {
+                    clear_all_content()
+                    error_div.style = ""
+                    page_div.style = "display: none"
+                    return -1;
+                }
+                error_div.style = "display: none"
+                page_div.style = ""
+                draw_target_node_nav(response)
+                draw_target_node_content(response)
+                draw_move_form_info(selected_ids(),node_id)
+                draw_copy_info(selected_ids(),node_id)
+            },
+            error: function (response) {
+                clear_all_content()
+                error_div.style = ""
+                page_div.style = "display: none"
+            }
+        })
+    }
+
+    function clear_all_content() {
+        let page_nav_div = document.getElementById("target_node_nav");
+        page_nav_div.innerHTML = "";
+        let page_content_div = document.getElementById("target_node_content");
+        page_content_div.innerHTML = "";
+        let move_nodes_form = document.getElementById("move_nodes_form");
+        move_nodes_form.innerHTML = "";
+    }
+
+    function draw_target_node_nav(response) {
+        let page_nav_div = document.getElementById("target_node_nav");
+        page_nav_div.innerHTML = "";
+        node_path = response["data"]["node"]["node_path"]
+        for (let i = 0; i < node_path.length; i++) {
+            if (i + 1 === node_path.length) {
+                page_nav_div.innerHTML += `<li class="breadcrumb-item active" aria-current="page">${node_path[i]["name"]}</li>`
+            } else {
+                page_nav_div.innerHTML += `<li class="breadcrumb-item">
+                     <a href="javascript: void(0)" onclick="show_target_dialog(${node_path[i]["id"]})" %>${node_path[i]["name"]}</a>
+                    </li>`
+            }
+        }
+    }
+
+    function draw_target_node_content(response) {
+        let page_content_div = document.getElementById("target_node_content");
+        page_content_div.innerHTML = "";
+        sub_dir_nodes = response["data"]["sub_dir_nodes"]
+        for (let i = 0; i < sub_dir_nodes.length; i++) {
+            page_content_div.innerHTML += `<tr>
+            <td>
+              <a class="link-wrapper" href="javascript: void(0)" onclick="show_target_dialog(${sub_dir_nodes[i]["id"]})">
+                <%= image_tag "dir_icon.svg" %>
+                <span>${sub_dir_nodes[i]["name"]}</span>
+              </a>
+            </td>
+          </tr>`
+        }
+    }
+
+    function draw_move_form_info(ids, target_id) {
+        let move_nodes_form = document.getElementById("move_nodes_form");
+        move_nodes_form.innerHTML = ""
+
+        let ids_field = document.createElement("input");
+        ids_field.type = "hidden";
+        ids_field.name = "ids";
+        ids_field.value = JSON.stringify(ids);
+
+        let target_id_field = document.createElement("input");
+        target_id_field.type = "hidden";
+        target_id_field.name = "target_id";
+        target_id_field.value = target_id;
+
+        let submit_button = document.createElement("button");
+        submit_button.type = "submit";
+        submit_button.className = "btn btn-primary";
+        submit_button.textContent = "移动";
+
+        move_nodes_form.appendChild(ids_field);
+        move_nodes_form.appendChild(target_id_field);
+        move_nodes_form.appendChild(submit_button);
+    }
+
+    function draw_copy_info(ids, target_id) {
+        let move_nodes_div = document.getElementById("copy_nodes_div");
+        move_nodes_div.innerHTML = "";
+
+        let copy_button = document.createElement("button")
+        copy_button.className = "btn btn-primary";
+        copy_button.textContent = "复制";
+
+        copy_button.addEventListener("click", function () {
+            console.log("开始拷贝")
+            $.ajax({
+                type: "post",
+                url: "<%= copy_nodes_path %>",
+                data: {ids: ids, target_id: target_id},
+                success: function (response) {
+                    console.log("成功")
+                    console.log(response)
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log("失败")
+                    console.log(response)
+                    let modal = document.getElementById("error_copy_dialog");
+                    let modalInstance = new bootstrap.Modal(modal);
+                    modalInstance.show();
+                }
+            })
+        })
+
+
+        move_nodes_div.appendChild(copy_button);
+
+    }
+
+
+</script>

@@ -1,0 +1,51 @@
+<% node_path = @dir_node.node_path %>
+<% node_path.pop %>
+
+<div>
+
+  <div class="row">
+    <div class="col d-flex align-items-center">
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+
+          <% if node_path.present? %>
+            <%= puts "node_path debug #{node_path}" %>
+            <% node_path.each do |node| %>
+              <li class="breadcrumb-item">
+                <a href="<%= file_explore_path(dir: node.node_path_str) %>" %><%= node.name %></a></li>
+            <% end %>
+          <% end %>
+          <li class="breadcrumb-item active" aria-current="page"><%= @dir_node.name %></li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col d-flex justify-content-end">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_dir">创建目录</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="create_dir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">创建新目录</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_tag create_dir_path, method: :post do %>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">目录名称:</label>
+            <input type="text" class="form-control" id="recipient-name" name="dir_name">
+          </div>
+        </div>
+        <%= hidden_field_tag(:dir, @dir_node.node_path_str) %>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">确认</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

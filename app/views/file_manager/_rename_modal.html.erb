@@ -1,0 +1,54 @@
+<div class="modal fade" id="rename_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">重命名</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_tag re_name_path, method: :post do %>
+        <div class="modal-body">
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">新名称:</label>
+              <div id="rename_content">
+
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">确认</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#rename_modal").on("show.bs.modal", function () {
+            console.log("展示");
+            draw_rename_content(main_node_id);
+        });
+        $("#rename_modal").on("hide.bs.modal", function () {
+            console.log("隐藏");
+        });
+    })
+    
+    function draw_rename_content() {
+        let rename_content_div = document.getElementById("rename_content")
+        rename_content_div.innerHTML = ""
+
+        let ids_field = document.createElement("input");
+        ids_field.type = "hidden";
+        ids_field.name = "ids";
+        ids_field.value = JSON.stringify(selected_ids());
+
+        let new_name_field = document.createElement("input");
+        new_name_field.type = "text";
+        new_name_field.className = "form-control"
+        new_name_field.name = "new_name";
+
+        rename_content_div.appendChild(ids_field)
+        rename_content_div.appendChild(new_name_field)
+    }
+</script>

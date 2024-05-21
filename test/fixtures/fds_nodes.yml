@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  parent_node_id: 
+  sub_node_id: 
+  node_type: 1
+  name: MyString
+  size: 
+  md5: MyString
+
+two:
+  parent_node_id: 
+  sub_node_id: 
+  node_type: 1
+  name: MyString
+  size: 
+  md5: MyString

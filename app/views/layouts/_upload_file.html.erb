@@ -1,0 +1,77 @@
+<style>
+    .upload-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px; /* 修改这里，将按钮移动到右下角 */
+        left: auto;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #52d1ee, #3072ff);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        color: white;
+        text-align: center;
+        line-height: 70px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 9999;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    .upload-btn:hover {
+        background: linear-gradient(45deg, #3072ff, #52d1ee);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        transform: translateY(-3px);
+    }
+</style>
+
+<button class="upload-btn" href="#collapseExample" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+  上传文件
+</button>
+
+
+<% dir_paths = locals[:dir_path] %>
+<% dir_path_str = locals[:dir_path_str] %>
+<script>
+  var dir_path = "<%= dir_path_str %>"
+</script>
+
+
+<div data-controller="upload-files" class="custom-parent-container" >
+  <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+    <div class="offcanvas-body">
+      <!-- 页面内容 -->
+      <div class="container mt-5">
+        <div id="upload_file_alert"></div>
+
+        <h4>上传文件</h4>
+
+
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">root</li>
+            <% dir_paths.each do |path| %>
+              <li class="breadcrumb-item active" aria-current="page"><%= path %></li>
+            <% end %>
+          </ol>
+        </nav>
+
+
+        <!-- 选择文件按钮 -->
+        <div class="mb-3">
+          <input type="file" class="form-control" id="fileInput" multiple>
+        </div>
+
+        <!-- 上传按钮 -->
+        <button type="button" class="btn btn-primary" id="uploadBtn">上传</button>
+
+        <!-- 文件列表 -->
+        <ul class="list-group mt-3" id="fileList"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

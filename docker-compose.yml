@@ -1,0 +1,25 @@
+version: "2"
+
+services:
+  fds:
+    build: .
+    command: bin/rails server -b 0.0.0.0
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000 #docker 端口映射
+    environment:
+      PORT: 3000 # 服务端口
+      FDS_DATABASE_HOST: postgres # 数据库的服务名称
+      FDS_DATABASE_USERNAME: postgres # 数据库用户名
+      FDS_DATABASE_PASSWORD: 12345678 # 数据库密码
+      FDS_DATABASE_PORT: 5432 # 数据库端口
+      FDS_WAN_ADDRESS: http://example.com:3000 # 公网访问地址（本工程主要是以 DDNS+公网IP 方式实现）
+      FDS_LAN_ADDRESS: http://localhost:3000 # 局域网访问地址
+      RAILS_ENV: development # rails 服务的运行环境
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15  # 数据库镜像
+    environment:
+      POSTGRES_PASSWORD: 12345678 # 数据库初始密码
