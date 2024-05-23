@@ -80,5 +80,7 @@ Rails.application.configure do
   config.hosts << wan_address
   config.hosts << lan_address
 
+  config.action_mailer.default_url_options = { host: ENV.fetch("FDS_WAN_ADDRESS") { "http://examle.com" }, port: ENV.fetch("PORT") { 3000 } }
+
   config.active_storage.service = :local
 end

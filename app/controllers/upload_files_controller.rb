@@ -1,4 +1,5 @@
 class UploadFilesController < ApplicationController
+  before_action :dump_user
   @@FILES_UPLOAD_STAT = {}
 
   def dump_params
@@ -9,6 +10,12 @@ class UploadFilesController < ApplicationController
         puts "get params #{key} = #{params[key]}"
       end
     end
+    puts "======================================"
+  end
+
+  def dump_user
+    puts "======================================"
+    puts "current user = #{current_user.email}"
     puts "======================================"
   end
 

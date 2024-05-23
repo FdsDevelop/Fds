@@ -2,19 +2,37 @@ class FileManagerController < ApplicationController
   before_action :only_lan_host_allow, only: :direct_download
 
   def dump_params
-    puts "======================================"
+    puts "===============PARAMS=================="
     if params.present?
       puts "get source params = #{params}"
       params.each_key do |key|
-        puts "get params #{key} = #{params[key]}"
+        puts "get param #{key} = #{params[key]}"
       end
     end
     puts "======================================"
   end
 
+  def dump_headers
+    puts "==============HEADERS================="
+    request.headers.each do |key, value|
+      # 在这里处理每个头部信息的键和值
+      puts "#{key}: #{value}"
+    end
+    puts "======================================"
+  end
+
+  def dump_user
+    puts "==============USER===================="
+    puts "current user = #{current_user.email}"
+    puts "======================================"
+  end
+
   before_action :dump_params
+  before_action :dump_headers
+  before_action :dump_user
 
   def file_explore
+    puts "current user = #{current_user}"
     dir_path_str = params[:dir]
     @dir_node = FdsNode.find_by_node_path_str(dir_path_str)
     @dir_node = FdsNode.root unless @dir_node
