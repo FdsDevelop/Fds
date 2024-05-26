@@ -18,12 +18,34 @@
           background-color: #fff;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
           width: 100%;
+          position: fixed;
+          top: 0;
+          left: 0;
       }
+
+     .custom-content {
+         height: 100%; /* 设置固定高度以触发垂直滚动 */
+         overflow-y: auto; /* 允许垂直滚动 */
+         overflow-x: hidden; /* 禁用水平滚动 */
+
+         /*background-color: #f7f7f7;*/
+         padding: 0;
+         padding-top: 60px;
+         padding-bottom: 60px;
+     }
+
+     .custom-footer {
+         position: fixed;
+         bottom: 0;
+         left: 0;
+         width: 100%;
+         text-align: center;
+     }
+
   </style>
 
 </head>
 
-<body>
 <header>
 
   <nav class="navbar navbar-expand-md custom-nav ">
@@ -85,14 +107,25 @@
 
 </header>
 
+<body>
+  <div class="custom-content">
+    <div id="loadingOverlay" style="display: none;">
+      <div id="loadingSpinner"></div>
+    </div>
+    <div class="container mt-5">
+      <%= render_flash_messages %>
+      <%= yield %>
+    </div>
+  </div>
 
-<div id="loadingOverlay" style="display: none;">
-  <div id="loadingSpinner"></div>
-</div>
-<div class="container mt-5">
-  <%= render_flash_messages %>
-  <%= yield %>
-</div>
+
+
+  <footer class="bg-light text-center text-lg-start custom-footer">
+    <div class="text-center p-2">
+      &copy; 2024 Your Website. All rights reserved.
+    </div>
+  </footer>
+
 </body>
 </html>
 
