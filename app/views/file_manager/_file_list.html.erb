@@ -25,13 +25,24 @@
         width: 100%;
         height: 100%;
     }
+
+    .link-dots {
+        color: black;
+        text-decoration: none;
+    }
+
+    .link-dots:hover {
+        color: black;
+        font-weight: bold;
+    }
 </style>
 
 <div>
   <table class="table table-hover" func="files_list">
     <colgroup>
       <col style="width: 2%;">
-      <col style="width: 75%;">
+      <col style="width: 70%;">
+      <col style="width: 5%">
       <col style="width: 8%;">
       <col style="width: 15%;">
     </colgroup>
@@ -39,6 +50,7 @@
     <tr>
       <th><input type="checkbox" id="toggle_check_box" onclick="toggle_check_boxes(this)"></th>
       <th>文件名</th>
+      <th></th>
       <th>大小</th>
       <th>修改日期</th>
     </tr>
@@ -66,6 +78,9 @@
           </td>
         <% end %>
 
+        <td style="vertical-align: middle" onclick="tr_context_menu(this.parentNode)">
+          <a class="link-dots" href="javascript:void(0)" >&#x22EF</a>
+        </td>
         <td style="vertical-align: middle;"><%= node.human_size %></td>
         <td style="vertical-align: middle;"><%= node.human_updated_at %></td>
       </tr>
