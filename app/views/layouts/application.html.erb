@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" type="image/x-icon" href="<%= asset_path('fds_logo.png') %>">
+  <link rel="icon" type="image/x-icon" href="<%= asset_path('fds_logo_dark.png') %>">
   <title>Fds</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <%= csrf_meta_tags %>
@@ -16,32 +16,67 @@
 
 <body>
 <header>
+
   <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">FDS</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="<%= file_explore_path(dir: "/") %>">主目录</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="文件名" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+      <div class="navbar-collapse" id="navbarNav">
+
+        <div class="navbar-nav mr-auto">
+          <a class="navbar-brand" href="<%= file_explore_path(dir: "/") %>">
+            <img src="<%= asset_path('fds_logo_light.png') %>" alt="Bootstrap" width="54" height="30">
+          </a>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+              <a class="nav-link active" aria-current="page" href="<%= file_explore_path(dir: "/") %>">主目录</a>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="navbar-nav mx-auto">
+
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="文件名" aria-label="Search">
+            <button class="btn btn-secondary" type="submit">Search</button>
+          </form>
+
+        </div>
+
+
+
+        <div class="navbar-nav ml-auto">
+
+          <% if user_signed_in? %>
+
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <%= current_user.user_name %>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">用户信息</a></li>
+                <li><a class="dropdown-item" href="#">修改密码</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <%= link_to "退出登录", destroy_user_session_path, :method => :delete, class: "dropdown-item"%>
+                </li>
+              </ul>
+            </div>
+
+          <% else %>
+            <%= link_to "登录", new_session_path(resource_name), class: "btn btn-primary"%>
+          <% end %>
+
+
+        </div>
       </div>
     </div>
   </nav>
+
 </header>
+
+
 <div id="loadingOverlay" style="display: none;">
   <div id="loadingSpinner"></div>
 </div>
