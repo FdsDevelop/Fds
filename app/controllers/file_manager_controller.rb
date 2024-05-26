@@ -28,14 +28,27 @@ class FileManagerController < ApplicationController
   end
 
   before_action :dump_params
-  before_action :dump_headers
+  # before_action :dump_headers
   before_action :dump_user
 
   def file_explore
     puts "current user = #{current_user}"
     dir_path_str = params[:dir]
+    sort_str = params[:sort]
+
+
     @dir_node = FdsNode.find_by_node_path_str(dir_path_str)
     @dir_node = FdsNode.root unless @dir_node
+    @sub_nodes = @dir_node.sub_nodes.order(node_type: :desc)
+    if sort_str.present?
+      sorts = sort_str.split(",");
+      sorts.each do |sort|
+        f = sort.split(":")[0]
+        v = sort.split(":")[1]
+        order_str = "#{f} #{v}"
+        @sub_nodes = @sub_nodes.order(order_str)
+      end
+    end
   end
 
   def create_dir

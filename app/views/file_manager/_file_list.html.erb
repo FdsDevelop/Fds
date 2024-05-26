@@ -1,5 +1,3 @@
-<% sub_nodes = @dir_node.sub_nodes %>
-
 <%= render_upload_file(@dir_node.node_path_str) %>
 
 <style>
@@ -35,6 +33,11 @@
         color: black;
         font-weight: bold;
     }
+
+    .table-head-link {
+        color: black;
+        text-decoration: none;
+    }
 </style>
 
 <div>
@@ -49,14 +52,39 @@
     <thead>
     <tr>
       <th><input type="checkbox" id="toggle_check_box" onclick="toggle_check_boxes(this)"></th>
-      <th>文件名</th>
+      <th onclick="choose_sort_param('name')">
+        <a href="javascript: void(0)" class="table-head-link">
+          文件名
+            <span>
+              <img src="<%= asset_path("asc_icon") %>" id="name_asc" style="display: none">
+              <img src="<%= asset_path("desc_icon") %>" id="name_desc" style="display: none">
+            </span>
+        </a>
+
+      </th>
       <th></th>
-      <th>大小</th>
-      <th>修改日期</th>
+      <th onclick="choose_sort_param('size')">
+        <a href="javascript: void(0)" class="table-head-link">
+        文件大小
+        <span>
+          <img src="<%= asset_path("asc_icon") %>" id="size_asc" style="display: none">
+          <img src="<%= asset_path("desc_icon") %>" id="size_desc" style="display: none">
+        </span>
+        </a>
+      </th>
+      <th onclick="choose_sort_param('updated_at')">
+        <a href="javascript: void(0)" class="table-head-link">
+        修改日期
+        <span>
+          <img src="<%= asset_path("asc_icon") %>" id="updated_at_asc" style="display: none">
+          <img src="<%= asset_path("desc_icon") %>" id="updated_at_desc" style="display: none">
+        </span>
+        </a>
+      </th>
     </tr>
     </thead>
     <tbody>
-    <% sub_nodes.each do |node| %>
+    <% @sub_nodes.each do |node| %>
       <tr id=<%= "tr-#{node.id}" %> oncontextmenu="tr_context_menu(this)">
         <td style="vertical-align: middle; text-align: center">
           <input type="checkbox" id="<%= node.id %>" onclick="select_check_box(this)">
@@ -94,6 +122,82 @@
 </ul>
 
 <script>
+  $(document).ready(update_sort_icon)
+
+  // 针对排序
+  function update_sort_icon(){
+      // 获取当前网页的 URL
+      let url = new URL(window.location.href);
+      let params = new URLSearchParams(url.search);
+      let sort_str = params.get('sort');
+
+      if (sort_str !== null && sort_str !== ""){
+          first_sort = sort_str_to_obj(sort_str)[0];
+          let f = first_sort["f"];
+          let v = first_sort["v"];
+          let node_id = `${f}_${v}`;
+          let icon = document.getElementById(node_id);
+          icon.style.display = "";
+      }
+  }
+
+  function sort_str_to_obj(sort_str) {
+    let sorts = [];
+    if (sort_str === null){
+        return sorts;
+    }
+    let sort_strs = sort_str.split(",");
+    for (let i = 0; i < sort_strs.length; i++){
+        sorts.push({"f": sort_strs[i].split(":")[0], "v": sort_strs[i].split(":")[1] })
+    }
+    return sorts;
+  }
+
+  function sort_obj_to_str(sort_obj) {
+    let result_str = '';
+    if (sort_obj === null){
+        return result_str;
+    }
+    for (let i = 0; i < sort_obj.length; i++){
+        if (i === 0){
+            result_str = `${sort_obj[i]["f"]}:${sort_obj[i]["v"]}`
+        }else{
+            result_str = `${result_str},${sort_obj[i]["f"]}:${sort_obj[i]["v"]}`
+        }
+    }
+    return result_str
+  }
+  
+  function choose_sort_param(field) {
+      // 获取当前网页的 URL
+      var url = new URL(window.location.href);
+
+      // 创建一个 URLSearchParams 对象
+      var params = new URLSearchParams(url.search);
+      let sort_str = params.get('sort');
+
+      let sort_obj = sort_str_to_obj(sort_str);
+      let value_set = false;
+      for(let i = 0 ; i < sort_obj.length; i++){
+          let f = sort_obj[i]["f"];
+          if (field === f){
+              sort_obj[i]["v"] = sort_obj[i]["v"]==="asc"? "desc":"asc";
+              let item = sort_obj.splice(i,1)[0];
+              sort_obj.unshift(item)
+              value_set = true;
+              break;
+          }
+      }
+      if (!value_set){
+          sort_obj.unshift({"f" : field, "v": "asc" });
+      }
+      let new_sort_str = sort_obj_to_str(sort_obj);
+      params.set('sort', new_sort_str);
+      url.search = params.toString();
+      window.location.href = url.toString();
+  }
+
+
     // 针对 check_box 的操作
     function select_check_box(check_box) {
         var tr = check_box.parentNode.parentNode;
