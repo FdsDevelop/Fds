@@ -57,6 +57,9 @@ export default class extends Controller {
                         if (finishCount === files.length) {
                             fileInput.disabled = false;
                             cancel_notice_unload();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 500);
                         }
                     })
                 }
