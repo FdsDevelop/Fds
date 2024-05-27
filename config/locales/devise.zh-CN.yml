@@ -80,5 +80,6 @@ zh-CN:
               too_short: "太短"
             user_name:
               blank: "不能为空"
+              taken: "已注册"
             password_confirmation:
               confirmation: "失败"
