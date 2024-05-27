@@ -1,16 +1,41 @@
-<h2>Forgot your password?</h2>
+<style>
+    .center-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        width: 400px;
+    }
+</style>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+<div class="center-box">
+  <h2>忘记密码？</h2>
 
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
+  <br/>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "form-validate" }) do |f| %>
 
-<%= render "devise/shared/links" %>
+    <div class="form-group">
+        <%= f.label "邮箱地址", class: "form-label" %><br/>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+    </div>
+
+    <br/>
+    <div class="d-grid gap-2">
+      <%= f.submit "发送重置密码验证地址", class: "btn btn-primary" %>
+
+      <% if controller_name != 'sessions' %>
+        <%= link_to "登录", new_session_path(resource_name), class: "btn btn-secondary"%>
+      <% end %>
+
+      <% if devise_mapping.registerable? && controller_name != 'registrations' %>
+        <%= link_to "注册", new_registration_path(resource_name), class: "btn btn-secondary"%>
+      <% end %>
+    </div>
+
+  <% end %>
+</div>
