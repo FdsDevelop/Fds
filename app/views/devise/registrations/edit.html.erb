@@ -1,43 +1,56 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<!--<h2>Edit <%#= resource_name.to_s.humanize %></h2>-->
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
+<a href="javascript:history.back()" class="btn btn-primary"><img src="<%= asset_path("arrow_left_icon") %>" /> 返回</a>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
+<br/>
+<br/>
+<br/>
+
+<h2>修改密码</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form-validate" }) do |f| %>
+
+<!--  <div class="form-group">-->
+    <%#= f.label "邮箱地址", class: "form-label"%>
+    <%#= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control"%>
+<!--  </div>-->
+
+  <%# if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+<!--    <div>Currently waiting confirmation for: <%#= resource.unconfirmed_email %></div>-->
+  <%# end %>
+
+  <br/>
+  <div class="form-group">
+    <%= f.label "新密码", class: "form-label" %>
+    <%= f.password_field :password, autocomplete: "new-password" , class: "form-control"%>
     <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
+      <div class="form-text">密码长度应大于 <%= @minimum_password_length %> 个字符 </div>
     <% end %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  <br/>
+  <div class="form-group">
+    <%= f.label "确认新密码", class: "form-label", class: "form-label" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  <br/>
+  <div class="form-group">
+    <%= f.label "当前密码", class: "form-label" %>
+    <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+    <div class="form-text"> 我们需要您当前的密码来确认您的更改 </div>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Update" %>
+  <br/>
+  <div class="d-grid gap-2">
+    <%= f.submit "确认修改", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
+<!--<h3>Cancel my account</h3>-->
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+<!--<div>Unhappy? <%#= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>-->
 
-<%= link_to "Back", :back %>

@@ -86,8 +86,8 @@
                 <%= current_user.user_name %>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">用户信息</a></li>
-                <li><a class="dropdown-item" href="#">修改密码</a></li>
+<!--                <li><a class="dropdown-item" href="#">用户信息</a></li>-->
+                <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">修改密码</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <%= link_to "退出登录", destroy_user_session_path, :method => :delete, class: "dropdown-item"%>
