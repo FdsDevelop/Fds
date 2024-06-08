@@ -1,9 +1,10 @@
 <style>
     .center-box {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        /*position: fixed;*/
+        /*top: 50%;*/
+        /*left: 50%;*/
+        /*transform: translate(-50%, -50%);*/
+        display: inline-block;
         background-color: #fff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
         padding: 20px;
@@ -13,31 +14,33 @@
 
 <%= render "devise/shared/error_messages", resource: resource %>
 
-<div class="center-box">
-  <h2>修改密码</h2>
-  <br/>
-  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "form-validate" }) do |f| %>
-
-    <%= f.hidden_field :reset_password_token %>
-
-    <div class="form-group">
-      <%= f.label "新密码", class: "form-label" %><br/>
-      <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control" %>
-      <% if @minimum_password_length %>
-        <div class="form-text">密码长度应大于 <%= @minimum_password_length %> 个字符 </div>
-      <% end %>
-    </div>
-
+<div style="text-align: center; vertical-align: center">
+  <div class="center-box">
+    <h2>修改密码</h2>
     <br/>
-    <div class="form-group">
-      <%= f.label "确认新密码", class: "form-label" %><br/>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-    </div>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "form-validate" }) do |f| %>
 
-    <br/>
-    <div class="d-grid gap-2">
-      <%= f.submit "确认修改密码", class: "btn btn-primary" %>
-    </div>
-  <% end %>
+      <%= f.hidden_field :reset_password_token %>
 
+      <div class="form-group">
+        <%= f.label "新密码", class: "form-label" %><br/>
+        <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control" %>
+        <% if @minimum_password_length %>
+          <div class="form-text">密码长度应大于 <%= @minimum_password_length %> 个字符</div>
+        <% end %>
+      </div>
+
+      <br/>
+      <div class="form-group">
+        <%= f.label "确认新密码", class: "form-label" %><br/>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+      </div>
+
+      <br/>
+      <div class="d-grid gap-2">
+        <%= f.submit "确认修改密码", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+
+  </div>
 </div>

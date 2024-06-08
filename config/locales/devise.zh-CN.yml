@@ -68,10 +68,13 @@ zh-CN:
         password: "密码"
         user_name: "用户名"
         password_confirmation: "密码验证"
+        current_password: "当前密码"
     errors:
       models:
         user:
           attributes:
+            current_password:
+              blank: "不能为空"
             email:
               blank: "不能为空"
               taken: "已注册"

@@ -9,7 +9,7 @@
     </h6>
 
       <% resource.errors.full_messages.each do |message| %>
-       <span> <%= message %><%=t("semicolon") %></span>
+        <li><%= message %></li>
       <% end %>
 
   </div>
