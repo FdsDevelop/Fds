@@ -55,6 +55,7 @@
         <br/>
         <div class="d-grid gap-2">
           <% if need_admin? %>
+            <%= hidden_field_tag(:admin, true) %>
             <%= f.submit "创建管理员", class: "btn btn-primary" %>
           <% else %>
               <%= f.submit "注册", class: "btn btn-primary" %>

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  devise_for :users
   get 'fds_context_menu/files_operation'
   get 'home/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -30,4 +29,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  # devise_for :users
+
+  Rails.application.routes.draw do
+    devise_for :users, controllers: {
+      registrations: 'users/registrations'
+    }
+  end
 end

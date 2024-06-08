@@ -58,7 +58,9 @@
           </a>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
+              <% if signed_in? %>
               <a class="nav-link active" aria-current="page" href="<%= file_explore_path(dir: "/") %>">主目录</a>
+              <% end %>
             </div>
           </div>
 
@@ -69,8 +71,10 @@
         <div class="navbar-nav mx-auto">
 
           <form class="d-flex" role="search">
+            <% if signed_in? %>
             <input class="form-control me-2" type="search" placeholder="文件名" aria-label="Search" style="width: 300px">
             <button class="btn btn-dark" type="submit" style="width: 100px">搜索</button>
+            <% end %>
           </form>
 
         </div>
@@ -88,6 +92,10 @@
               <ul class="dropdown-menu dropdown-menu-end">
 <!--                <li><a class="dropdown-item" href="#">用户信息</a></li>-->
                 <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">修改密码</a></li>
+                <li><a class="dropdown-item" href="javascript: void(0)">个人配置</a></li>
+                <% if is_admin? %>
+                  <li><a class="dropdown-item" href="javascript: void(0)">系统管理</a></li>
+                <% end %>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <%= link_to "退出登录", destroy_user_session_path, :method => :delete, class: "dropdown-item"%>

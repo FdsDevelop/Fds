@@ -12,4 +12,16 @@ module ApplicationHelper
     safe_join(flash_messages)
   end
 
+  def need_admin?
+    if User.where(admin: true).count == 0
+      true
+    else
+      false
+    end
+  end
+
+  def is_admin?
+    current_user.admin?
+  end
+
 end
