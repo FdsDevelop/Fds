@@ -24,4 +24,15 @@ module ApplicationHelper
     current_user.admin?
   end
 
+  def render_back
+    render 'layouts/go_back'
+  end
+  def render_tabs
+    @tab = params[:tab]
+    if !@tab.present? || !@tabs[@tab.to_sym].present?
+      @tab = @tabs.keys.first.to_s
+    end
+    render 'layouts/head_tabs'
+  end
+
 end

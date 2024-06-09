@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'fdss_api_keys/index'
   get 'fds_context_menu/files_operation'
   get 'home/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -33,8 +34,16 @@ Rails.application.routes.draw do
   # devise_for :users
 
   Rails.application.routes.draw do
+  get 'fdss_api_keys/index'
     devise_for :users, controllers: {
       registrations: 'users/registrations'
     }
   end
+
+  get "system_settings", to:"settings#system_settings", as: "system_settings"
+  get "user_settings", to:"settings#user_settings", as:"user_settings"
+
+  post "fdss_api_key_create", to: "fdss_api_keys#create", as: "fdss_api_key_create"
+  post "fdss_api_key_destroy", to: "fdss_api_keys#destroy", as: "fdss_api_key_destroy"
+  get "fdss_api_key_detail", to: "fdss_api_keys#detail", as: "fdss_api_key_detail"
 end

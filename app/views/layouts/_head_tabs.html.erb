@@ -1,0 +1,14 @@
+<ul class="nav nav-tabs">
+  <% @tabs.each_key  do |key| %>
+    <% if @tab.to_s == key.to_s %>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="<%= send(@path_method, { tab: key }) %>"><%= @tabs[key] %></a>
+        </li>
+    <% else %>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= send(@path_method, { tab: key }) %>"><%= @tabs[key] %></a>
+        </li>
+    <% end %>
+
+  <% end %>
+</ul>

@@ -92,10 +92,11 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
 <!--                <li><a class="dropdown-item" href="#">用户信息</a></li>-->
+                <li><a class="dropdown-item" href="<%= file_explore_path(dir: "/") %>">回到主页</a></li>
                 <li><a class="dropdown-item" href="<%= edit_user_registration_path %>">修改密码</a></li>
-                <li><a class="dropdown-item" href="javascript: void(0)">个人配置</a></li>
+                <li><a class="dropdown-item" href="<%= user_settings_path %>">个人配置</a></li>
                 <% if is_admin? %>
-                  <li><a class="dropdown-item" href="javascript: void(0)">系统管理</a></li>
+                  <li><a class="dropdown-item" href="<%= system_settings_path %>">系统管理</a></li>
                 <% end %>
                 <li><hr class="dropdown-divider"></li>
                 <li>

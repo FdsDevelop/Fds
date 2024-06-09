@@ -2,13 +2,6 @@
 
 <%= render "devise/shared/error_messages", resource: resource %>
 
-
-<a href="javascript:history.back()" class="btn btn-primary"><img src="<%= asset_path("arrow_left_icon") %>" /> 返回</a>
-
-<br/>
-<br/>
-<br/>
-
 <h2>修改密码</h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form-validate" }) do |f| %>

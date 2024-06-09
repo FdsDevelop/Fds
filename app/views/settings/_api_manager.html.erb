@@ -1,0 +1,82 @@
+<br>
+
+<h3>Fdss Api 管理</h3>
+
+<div style="text-align: right">
+  <%= link_to "添加密钥", fdss_api_key_create_path, class: "btn btn-primary", method: :post %>
+</div>
+
+<% if @fdss_api_keys.present? %>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Fdss 序列号</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @fdss_api_keys.each do |fdss_api_key| %>
+      <tr>
+        <td style="vertical-align: middle"><%= fdss_api_key.serial %></td>
+        <td style="text-align: right">
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button class="btn btn-success" onclick="show_key_info(<%= fdss_api_key.id %>)">查看密钥</button>
+            <%= link_to "删除密钥", fdss_api_key_destroy_path(id: fdss_api_key.id), class: "btn btn-danger", method: :post, data: { confirm: '确定要删除吗？' } %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+<% else %>
+  <br>
+  <div class="alert alert-warning" role="alert">
+    没有任何数据
+  </div>
+<% end %>
+
+  <div class="modal fade" id="fdss_api_key_detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">密钥信息</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3" id="key_detail_content">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+      function show_key_info(id) {
+          console.log(`show id = ${id}`)
+
+          let detail_content_div = document.getElementById("key_detail_content");
+          detail_content_div.innerHTML = ""
+          $.ajax({
+              method: "get",
+              url: "<%= fdss_api_key_detail_path %>",
+              data: {id: id},
+              success: function (response) {
+                  detail_content_div.innerHTML = response
+              },
+              error: function (response) {
+                  detail_content_div.innerHTML = `<div class="alert alert-danger" role="alert">
+                                                    请求失败!!!
+                                                  </div>`
+              }
+          })
+
+          let modal = document.getElementById('fdss_api_key_detail');
+          let bs_modal = new bootstrap.Modal(modal);
+          bs_modal.show();
+      }
+  </script>

@@ -1,0 +1,12 @@
+<% if @fdss_api_key %>
+  <label for="recipient-name" class="col-form-label">请将下方的环境变量配置到 FDSS 服务中:</label>
+
+  <p style="word-wrap: break-word; overflow-wrap: break-word">FDSS_SERIAL=<%= @fdss_api_key.serial %></p>
+  <p style="word-wrap: break-word; overflow-wrap: break-word">FDSS_SECRET=<%= @fdss_api_key.secret %></p>
+  <p style="word-wrap: break-word; overflow-wrap: break-word">FDSS_SIGN=<%= @fdss_api_key.sign %></p>
+
+<% else %>
+  <div class="alert alert-danger" role="alert">
+    获取密钥信息失败！！！
+  </div>
+<% end %>
