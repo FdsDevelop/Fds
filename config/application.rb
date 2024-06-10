@@ -37,4 +37,5 @@ Rails.application.configure do
   config.fds.lan_address = ENV.fetch("FDS_LAN_ADDRESS") { "http://localhost:3000" }
   config.fds.web_port = ENV.fetch("PORT") { 3000 }
   config.fds.lan_host_ip = Rails.application.config.fds.lan_address.sub("http://","").sub("https://","").chomp("/").chomp(":#{Rails.application.config.fds.web_port}")
+  config.fds.deadline_s = 60
 end

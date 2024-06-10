@@ -1,5 +1,10 @@
+include FdssSyncManagerHelper
 class FdssSyncManagerController < ApplicationController
   skip_before_action :verify_authenticity_token
+  skip_before_action :authenticate_user!
+
+  before_action :api_auth
+  before_action :dump_params
 
   def dump_params
     puts "======================================"
@@ -12,7 +17,7 @@ class FdssSyncManagerController < ApplicationController
     puts "======================================"
   end
 
-  before_action :dump_params
+
 
   def fdss_status_report
     ret = {}
@@ -58,7 +63,7 @@ class FdssSyncManagerController < ApplicationController
     ret[:data] = {}
 
     begin
-    data = JSON.parse(params[:data])
+    data = params[:data]
     ids = data["node_ids"]
 
     if ids.length > max_count
@@ -78,7 +83,7 @@ class FdssSyncManagerController < ApplicationController
       ret[:data] = {}
     end
 
-
+    puts "xiaohu debug ret = #{ret}"
     render json: ret
 
   end
@@ -103,7 +108,8 @@ class FdssSyncManagerController < ApplicationController
   end
 
   def fdss_download
-    id = params[:id]
+    data = params[:data]
+    id = data[:id]
     fds_storage_path = Rails.application.config.fds.storage_path
     begin
       node = FdsNode.find(id)
