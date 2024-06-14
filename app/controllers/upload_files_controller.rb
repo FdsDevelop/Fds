@@ -126,6 +126,7 @@ class UploadFilesController < ApplicationController
         ret[:data] = ""
       end
     rescue RuntimeError,ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+      FileUtils.rm_rf(temp_file_path) if File.exist?(temp_file_path)
       @@FILES_UPLOAD_STAT.delete(hash_key)
       ret[:ret_code] = -1
       ret[:err_msg] = e.message
