@@ -18,18 +18,18 @@
 </style>
 
 
-<div style="text-align: center; vertical-align: center">
+<div style="text-align: center">
   <div class="center-box">
     <h2>登录</h2>
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-validate" }) do |f| %>
       <br>
-      <div class="form-group">
+      <div class="form-group" style="text-align: left">
         <%= f.label "邮箱", class: "form-label" %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
       </div>
 
       <br>
-      <div class="form-group">
+      <div class="form-group" style="text-align: left">
         <div>
           <%= f.label "密码", class: "form-label" %>
           <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
@@ -41,9 +41,9 @@
 
       <br>
       <% if devise_mapping.rememberable? %>
-        <div class="mb-3 form-check">
-          <%= f.check_box :remember_me, class: "form-check-input" %>
-          <%= f.label "保持登录状态", class: "form-label" %>
+        <div class="mb-3 form-check" style="text-align: left">
+          <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me_checkbox" %>
+          <%= f.label "保持登录状态", class: "form-label", onclick: 'check_box_click("remember_me_checkbox")' %>
         </div>
       <% end %>
 
@@ -57,3 +57,16 @@
 
   </div>
 </div>
+
+<script>
+  function check_box_click(id){
+      let check_box = document.getElementById(id);
+      if (check_box !== null) {
+          if (check_box.checked) {
+              check_box.checked = false;
+          } else {
+              check_box.checked = true;
+          }
+      }
+  }
+</script>

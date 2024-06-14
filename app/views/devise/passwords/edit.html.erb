@@ -14,7 +14,7 @@
 
 <%= render "devise/shared/error_messages", resource: resource %>
 
-<div style="text-align: center; vertical-align: center">
+<div style="text-align: center">
   <div class="center-box">
     <h2>修改密码</h2>
     <br/>
@@ -22,7 +22,7 @@
 
       <%= f.hidden_field :reset_password_token %>
 
-      <div class="form-group">
+      <div class="form-group" style="text-align: left">
         <%= f.label "新密码", class: "form-label" %><br/>
         <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control" %>
         <% if @minimum_password_length %>
@@ -31,7 +31,7 @@
       </div>
 
       <br/>
-      <div class="form-group">
+      <div class="form-group" style="text-align: left">
         <%= f.label "确认新密码", class: "form-label" %><br/>
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
       </div>

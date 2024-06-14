@@ -21,7 +21,7 @@
     <br/>
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "form-validate" }) do |f| %>
 
-      <div class="form-group">
+      <div class="form-group" style="text-align: left">
         <%= f.label "邮箱地址", class: "form-label" %><br/>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
       </div>
